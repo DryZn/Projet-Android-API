@@ -1,5 +1,7 @@
 package com.example.progmobile;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,19 +19,28 @@ public class PersoAdapter extends android.support.v7.widget.RecyclerView.Adapter
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // each data item is justsecondLine a string in this case
         public TextView textView;
         public ImageView imageView;
+        private Context context;
         public ViewHolder(View v) {
             super(v);
+            context = v.getContext();
             imageView = v.findViewById(R.id.icon);
-            textView = v.findViewById(R.id.textt);
+            v.setOnClickListener(this);
+        }
+
+        //On change les attributs du contexte pour lancer la nouvelle activité
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(context, Details.class);
+            context.startActivity(intent);
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public PersoAdapter(List<Characters> myDataset) {
+    public PersoAdapter(List<Characters> myDataset){
         mDataset = myDataset.toArray(new Characters[0]);
     }
 
