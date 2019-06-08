@@ -2,7 +2,7 @@
 Réalisé par Anthony LESENFANS (3A CFA)
 
 # Présentation
-L'application charge des images des personnages de Super Smash Bros WiiU et lorsque l'on "clique" sur l'un d'entre eux, on peut voir les détails du personnage.
+L'application charge des images des personnages de Super Smash Bros WiiU depuis l'PAI Rest de Kurogane Hammer  et lorsque l'on "clique" sur l'un d'entre eux, on peut voir les détails du personnage.
 
 Les données sont stockées dans un cache, ce qui nous permet de pouvoir accéder aux informations chargées même lorsque l'on est hors ligne.
 
