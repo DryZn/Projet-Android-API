@@ -1,9 +1,13 @@
 package com.example.progmobile;
 
+import android.content.SharedPreferences;
+
+import java.lang.reflect.Type;
 import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -14,9 +18,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ControllerAPI implements Callback<List<Characters>>{
     static final String BASE_URL = "http://beta-api-kuroganehammer.azurewebsites.net/";
     private MainActivity view;
+    private SharedPreferences sharedPreferences;
 
-    public ControllerAPI(MainActivity view) {
+    public ControllerAPI(MainActivity view, SharedPreferences sharedPreferences) {
         this.view = view;
+        this.sharedPreferences = sharedPreferences;
     }
 
     public void start() {
@@ -41,6 +47,7 @@ public class ControllerAPI implements Callback<List<Characters>>{
         if(response.isSuccessful()) {
             List<Characters> changesList = response.body();
             view.initRecycler(changesList);
+            save(changesList);
         } else {
             System.out.println(response.errorBody());
         }
@@ -50,6 +57,24 @@ public class ControllerAPI implements Callback<List<Characters>>{
     public void onFailure(Call<List<Characters>> call, Throwable t) {
         t.printStackTrace();
         //Au cas ou le téléphone n est pas encore connecté a internet, on réessaie jusqu'à l'être
-        this.start();
+
+        List<Characters> changesList = getSave();
+        view.initRecycler(changesList);
+    }
+
+    private void save(List<Characters> changesList) {
+        String changesListString = new Gson().toJson(changesList);
+        sharedPreferences
+                .edit()
+                .putString("liste", changesListString)
+                .apply();
+
+    }
+    //inverse de save
+    private List<Characters> getSave() {
+        String changesListString = sharedPreferences.getString("liste", "");
+        Type changeListType = new TypeToken<List<Characters>>(){}.getType();
+        List<Characters> changesList = new Gson().fromJson(changesListString, changeListType);
+        return changesList;
     }
 }

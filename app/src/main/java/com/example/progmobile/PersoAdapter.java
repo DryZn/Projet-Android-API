@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -15,13 +14,13 @@ import java.util.List;
 
 public class PersoAdapter extends android.support.v7.widget.RecyclerView.Adapter<PersoAdapter.ViewHolder> {
     private Characters[] mDataset;
+    private int compteur;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // each data item is justsecondLine a string in this case
-        public TextView textView;
         public ImageView imageView;
         private Context context;
         public ViewHolder(View v) {
@@ -34,13 +33,21 @@ public class PersoAdapter extends android.support.v7.widget.RecyclerView.Adapter
         //On change les attributs du contexte pour lancer la nouvelle activité
         @Override
         public void onClick(View v) {
+            int position = this.getPosition();
+            Details.perso = mDataset[position];
+            Details.compteur = compteur;
             Intent intent = new Intent(context, Details.class);
             context.startActivity(intent);
+            compteur++;
+            if (compteur == 6){
+                compteur = 0;
+            }
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public PersoAdapter(List<Characters> myDataset){
+        compteur = 0;
         mDataset = myDataset.toArray(new Characters[0]);
     }
 
